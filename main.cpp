@@ -15,6 +15,7 @@
 #include "Search/JumpSearch.h"
 #include "Search/ExponentialSearch.h"
 #include "Search/SublistSearch.h"
+#include "String/tasks.h"
 
 #include <cstring>
 
@@ -162,7 +163,7 @@ if (argc < 2) {
     std::cout << std::endl << ExponentialSearch(arr, sizeof(arr) /sizeof(arr[0]), value) << std::endl;
 }
 
-int main(int argc, char *argv[]) {
+void TestSublistSearch() {
     SNode<int> *first = new SNode<int>(1);
 
     SNode<int> *tmp = first;
@@ -181,6 +182,14 @@ int main(int argc, char *argv[]) {
     }
 
     std::cout << SublistSearch(first, second) << std::endl;
+}
+
+int main(int argc, char *argv[]) {
+    std::string str1 = "valera aa";
+    std::string str2 = "vlraeaaa";
+
+    std::cout << isAnagram(str1, str2) << std::endl;
+    std::cout << str1 << " " << str2 << std::endl;
 
     return 0;
 }
