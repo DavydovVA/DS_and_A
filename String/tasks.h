@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <cmath>
 #include <algorithm>
 
 
@@ -200,6 +201,30 @@ bool IisSubsequence(const std::string &str1, const std::string &str2) {
     }
 
     return i == n;
+}
+
+
+std::vector<int> SearchPattern(std::string str, std::string pattern) {
+    // O(n * (m - n))
+    std::vector<int> indexVec;
+
+    int strLen = str.size(), patLen = pattern.size();
+    if (patLen <= strLen) {
+        for(int i = 0; i < strLen - patLen; i++) {
+            int j;
+            for (j = 0; j < patLen; j++) {
+                if (str[i + j] != pattern[j]) {
+                    break;
+                } 
+            }
+
+            if (j == patLen) {
+                indexVec.push_back(i);
+            }
+        }
+    }
+
+    return indexVec;
 }
 
 
