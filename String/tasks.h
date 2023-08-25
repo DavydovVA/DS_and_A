@@ -1,14 +1,14 @@
 #ifndef STRINGTASKS_H
 #define STRINGTASKS_H
 
+#define LEETCODE
+
 #include <string>
 #include <algorithm>
 
 
-#define LEETCODE
-
-
 bool isAnagram(std::string str1, std::string str2) {
+    // O(N log(n))
     str1.erase(std::remove_if(
             std::begin(str1),
             std::end(str1),
@@ -52,6 +52,37 @@ bool isAnagram(std::string str1, std::string str2) {
     }
 
     return true;
+#endif
+}
+
+
+bool isPalindrome(std::string str) {
+    // O(n/2) = O(n)
+    str.erase(
+        std::remove_if(std::begin(str),
+                    std::end(str),
+                    ::isspace),
+                std::end(str)
+            );
+
+    std::transform(std::begin(str), std::end(str),
+        std::begin(str), ::toupper);
+
+#ifndef LEETCODE
+    int left = 0, right = str.size() - 1;
+    while (left < right) {
+        if (str[left++] != str[right--]) {
+            return false;
+        }
+    }
+
+    return true;
+#else
+    return std::equal(
+                std::begin(str),
+                std::begin(str) + str.size() / 2,
+                std::rbegin(str)
+                );
 #endif
 }
 

@@ -185,11 +185,8 @@ void TestSublistSearch() {
 }
 
 int main(int argc, char *argv[]) {
-    std::string str1 = "valera aa";
-    std::string str2 = "vlraeaaa";
+    
 
-    std::cout << isAnagram(str1, str2) << std::endl;
-    std::cout << str1 << " " << str2 << std::endl;
 
     return 0;
 }
