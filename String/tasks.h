@@ -86,6 +86,42 @@ bool isPalindrome(std::string str) {
 #endif
 }
 
+std::string DecimalToBinary(int decimal) {
+    // O(n log(n)), n = decimal
+    std::string binaryStr {"0"};
+
+    if (decimal > 0) {
+        binaryStr = "";
+
+        //variable for convenient division
+        div_t d {};
+        d.quot = decimal;
+
+        do {
+            d = std::div(d.quot, 2);
+
+            binaryStr = std::to_string(d.rem) + binaryStr;
+        }while(d.quot);
+    }
+
+    return binaryStr;
+}
+
+
+int StringToDecimal(const std::string str) {
+    // O(n)
+    int decimal = 0, n = 0;
+    std::string::const_reverse_iterator it;
+
+    for(it = std::rbegin(str), n; it != std::rend(str); it++, n++) {
+        if (*it == '1') {
+            decimal += pow(2, n);
+        }
+    }
+
+    return decimal;
+}
+
 
 #undef LEETCODE
 
