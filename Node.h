@@ -32,6 +32,10 @@ public:
     BSTNode<T> *left;
     BSTNode<T> *right;
     BSTNode<T> *parent;
+#ifdef BALANCED_TREE
+    int height; // Balanced
+#endif
+
 };
 
 #endif
