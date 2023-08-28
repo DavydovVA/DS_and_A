@@ -1,5 +1,5 @@
-#ifndef SDNODE_H
-#define SDNODE_H
+#ifndef BTSSDNODE_H
+#define BTSSDNODE_H
 
 
 template<typename T>
@@ -10,6 +10,8 @@ public:
     T value;
     SNode<T> *next;
 };
+
+
 template<typename T>
 class DNode {
 public:
@@ -18,6 +20,18 @@ public:
     T value;
     DNode<T> *prev;
     DNode<T> *next;
+};
+
+
+template<typename T>
+class BSTNode {
+public:
+    explicit BSTNode(T key) : key(key), left(nullptr), right(nullptr) {}
+
+    T key;
+    BSTNode<T> *left;
+    BSTNode<T> *right;
+    BSTNode<T> *parent;
 };
 
 #endif
