@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include <list>
 #include <unordered_map>
 #include <string>
@@ -18,62 +17,68 @@ public:
     }
 
     void Add(const Key& key, const Value& value) {
-        auto iter = cache_.find(key);
+        auto it = cache_.find(key);
 
-        if (iter != cache_.end()) {
-            // update value
-            iter->second->second = value;
-            data_.splice(data_.begin(), data_, iter->second);
+        if (it != cache_.end()) {
+            // обновляем значение
+            it->second->second = value;
+            // перемещаем в начало (теперь самый недавно использованный)
+            data_.splice(data_.begin(), data_, it->second);
             return;
         }
 
+        // если нужно вытолкнуть LRU
         if (data_.size() >= capacity_) {
-            const auto& last_used = data_.back();
-            cache_.erase(last_used.first);
+            auto& back = data_.back();
+            cache_.erase(back.first);
             data_.pop_back();
         }
 
+        // вставляем новый элемент
         data_.emplace_front(key, value);
         cache_[key] = data_.begin();
     }
 
     Value Get(const Key& key) {
-        auto iter = cache_.find(key);
+        auto it = cache_.find(key);
 
-        if (iter == cache_.end()) {
-            throw std::runtime_error(key);
+        if (it == cache_.end()) {
+            if constexpr (std::is_convertible_v<Key, std::string>) {
+                throw std::runtime_error("Key not found: " + key);
+            } else {
+                throw std::runtime_error("Key not found");
+            }
         }
 
-        data_.splice(data_.begin(), data_, iter->second);
+        // перемещаем в начало
+        data_.splice(data_.begin(), data_, it->second);
 
-        return iter->second->second;
+        return it->second->second;
     }
 
     bool Erase(const Key& key) {
-        auto iter = cache_.find(key);
+        auto it = cache_.find(key);
 
-        if (iter == cache_.end()) {
+        if (it == cache_.end()) {
             return false;
         }
 
-        data_.erase(iter->second);
-        //cache_erase(iter->first);
-        cache_.erase(iter);
+        data_.erase(it->second);
+        cache_.erase(it);
 
         return true;
     }
 
     bool Contains(const Key& key) const {
-        return data_.find(key) != data_.end();
+        return cache_.find(key) != cache_.end();
     }
 
     void Print() const {
-        for (const auto& item: data_) {
+        for (const auto& item : data_) {
             std::cout << "key: " << item.first << ", value: " << item.second << "\n";
         }
         std::cout << std::endl;
     }
-
 };
 
 int main() {
