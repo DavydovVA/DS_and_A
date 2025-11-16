@@ -13,7 +13,8 @@ private:
     size_t capacity_;
     TimePoint tp_ = 0;
 
-    //std::set<std::pair<TimePoint, Key>> tp_to_key_;
+    // std::set удобен для последующего перехода на LFU
+    //std::set<std::pair<TimePoint, Key>> queue_;
     std::map<TimePoint, Key> tp_to_key_;
     std::unordered_map<Key, TimePoint> key_to_tp_;
     std::unordered_map<Key, Value> data_;
@@ -36,7 +37,7 @@ public:
 
         // Добавление
         data_[key] = value;
-        //tp_to_key_.emplace(tp_, key);
+        //queue_.emplace(tp_, key);
         tp_to_key_[tp_] = key;
         key_to_tp_[key] = tp_;
 
@@ -56,8 +57,8 @@ public:
         // Удаляем пару (tp, key) из map
         tp_to_key_.erase(old_tp);
         tp_to_key_[tp_] = key;
-        //tp_to_key_.erase({old_tp, key});
-        //tp_to_key_.emplace(tp_, key);
+        //queue_.erase({old_tp, key});
+        //queue_.emplace(tp_, key);
 
         // Обновляем tp
         key_to_tp_[key] = tp_;
@@ -76,9 +77,8 @@ public:
         auto old_tp = key_to_tp_[key];
 
         tp_to_key_.erase(old_tp);
-        //tp_to_key_.erase({old_tp, key});
+        //queue_.erase({old_tp, key});
         key_to_tp_.erase(key);
-        //key_to_tp_.erase(key);
         data_.erase(it);
 
         return true;
